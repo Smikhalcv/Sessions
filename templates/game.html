@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Игра{% endblock %}
+
+{% block content %}
+<h1>УГАДАЙ ЧИСЛО</h1>
+    {% if game.status %}
+        {% if player.id == game.game_master %}
+            <div>
+                <h2>Вы захостили игру номер {{game.id}}</h2>
+                <p>Количество игроков в игре: {{count_players}}</p>
+            </div>
+        {% else %}
+            <div>
+                <h2>Вы учавствуете в игр номер {{game.id}}</h2>
+                <p>Угадайте число</p>
+            </div>
+        {% endif %}
+        <p>Угадайте число</p>
+        <p>Ответ в диапозоне от {{game.bottom_count}} до {{game.top_count}}</p>
+        <form action='{% url "game" game.id %}' method="POST">
+            {% csrf_token %}
+            {{guess_form}}
+            <br/>
+            <input type="submit" value="Подтвердить">
+        </form>
+    {% else %}
+        <h2>Игра закончена!!!</h2>
+        <h2>Победил игрок с id {{game.winner}}! Ему понадобилось {{game.winner_count}} попыток!</h2>
+        <a href='/'>Вернуться на главную страницу</a>
+    {% endif %}
+{% endblock %}

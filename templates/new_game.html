@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Новая игра{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="header">
+    <h1>Новая игра</h1>
+        <div>
+            <form action="{% url 'new_game' %}" method="POST">
+                {% csrf_token %}
+                {{ form }}
+                <br>
+                <input type="submit" value="Подтвердить"/>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

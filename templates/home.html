@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Угадай число{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="header">
+            <h1>Игра "Угадай число"</h1>
+            {% if player.name %}
+                <form action="{% url 'home' %}" method="POST">
+                    {% csrf_token %}
+                    {{ name_form }}
+                    <br>
+                    <input type="submit" value="Отправить"/>
+                </form>
+            {% endif %}
+            <div>
+                <a href="{% url 'new_game' %}">Создать новую игру</a>
+            </div>
+        </div>
+        {% block new_game %}
+            <div>
+                {% if list_game_player %}
+                    <p>У вас есть начатые игры</p>
+                    <p>Выберете игру, которую желаете возобновить</p>
+                    {% for game in list_game_player %}
+                        <a href="{% url 'game' game %}">Игра с id {{game}}</a>
+                    {% endfor %}
+                {% else %}
+                    <p>У вас нет начатых игры</p>
+                    <p>Выберете игру, чтоб к ней присоединиться</p>
+                    <ul>
+                        {% for item in have_games %}
+                            {% if item.status %}
+                                <li><a href="{% url 'game' item.id %}">Игра с id {{item.id}}</a></li>
+                            {% endif %}
+                        {% endfor%}
+                    </ul>
+                {% endif %}
+            </div>
+            <div>
+
+            </div>
+        {% endblock %}
+        {{ massage }}
+    </div>
+{% endblock %}
