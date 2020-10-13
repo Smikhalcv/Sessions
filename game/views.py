@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 import random
 from .models import Player, Game
 from .forms import NameForm, LimitNumber, GuessNumber
+from django.urls import reverse
 
 
 def show_home(request):
@@ -15,7 +16,7 @@ def show_home(request):
         if not player.name:
             content['name_form'] = NameForm
         if request.session.get('game_id'):
-            return redirect(f'/game/{request.session.get("game_id")}/')
+            return redirect(reverse('game', args=[int(f'{request.session.get("game_id")}')]))
         else:
             list_game_player = []
             for game in Game.objects.all():
@@ -53,7 +54,7 @@ def new_game(request):
             request.session['game_id'] = game.id
             game.players.add(player)
             player.game_master = True
-            return redirect(f'/game/{game.id}/')
+            return redirect(reverse('game', args=[int(f'{game.id}')]))
     return render(request, template, content)
 
 
